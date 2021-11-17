@@ -5,6 +5,19 @@ var upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', '
 var numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
 
+// This array tracks which types to include as follows: lower case, upper case, numbers, and specials
+var typesOfCharactersToInclude = [false,false,false,false];
+
+var characterSet = [];
+var passwordArray = [];
+var passwordString = "";
+
+var resetVariables = function() {
+  characterSet = [];
+  passwordArray = [];
+  passwordString = "";
+}
+
 // generates random number between two numbers, inclusive
 var getRandomNumberFromTo = function(min, max) {
   var x = Math.floor(Math.random() * (max - min + 1) + min);
@@ -17,14 +30,18 @@ var getRandomElementFromArray = function(array) {
   var randomIndex = getRandomNumberFromTo(0, lastElementIndex);
   return array[randomIndex];
 }
+// splice in random location
+var spliceValueAtRandomIndex = function(value, array) {
+  var lastElementIndex = array.length - 1;
+  var randomIndex = getRandomNumberFromTo(0, lastElementIndex);
+  array = array.splice(randomIndex, 0, value);
+}
+
+// 
 
 //obtainValidatedResponseOrQuit - uses allowable answers array to validate them
 //    try to do one function that can handle number range, yes/no, and selected at least one?
 
-// SKIP FUNCTION - this adds required values into the target array and makes sure they don't get overwritten
-// subtract number of required from total
-// fill those at random
-// squeeze in required using splice
 
             /*
           
