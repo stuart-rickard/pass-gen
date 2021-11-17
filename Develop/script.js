@@ -1,5 +1,10 @@
 var anarray = ['a','b','c','d','e']
 
+var lowerCaseLetters = [ 'a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
+var upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+var numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+var specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
+
 // generates random number between two numbers, inclusive
 var getRandomNumberFromTo = function(min, max) {
   var x = Math.floor(Math.random() * (max - min + 1) + min);
@@ -34,24 +39,24 @@ var getRandomElementFromArray = function(array) {
 
 
 how long a password - obtainAndValidate
-    reject bad answers
-        quit if necessary
+    validate or quit
 what are required characters
     lowercase
-    uppercase
-    numbers?
-        reject bad answers
-            quit
-    special characters?
-        reject
-            quit
+      validate or quit
+      uppercase
+      validate or quit
+      numbers?
+      validate or quit
+      special characters?
+      validate or quit
+      at least one selected
+       if not, go back to start or quit
 generate password
     set up parameters
         length of password
         requirements of password
-    fill in required characters first
-    fill in remaining characters using whole list
-    shuffle the array
+      fill in (length - required) characters using whole list
+      splice in required characters at random locations
 present password
     
 var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
