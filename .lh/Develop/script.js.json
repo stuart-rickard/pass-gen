@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 40,
+            "activePatchIndex": 44,
             "patches": [
                 {
                     "date": 1637038011201,
@@ -168,6 +168,22 @@
                 {
                     "date": 1637204979942,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -99,9 +99,11 @@\n obtainTypesOfChars\n   while typesofchars is not OK\n     get types of chars\n generatePassword\n-    set up parameters\n+    set up big array\n+      fill it up except for any required\n+    splice random the required ones\n         length of password\n         requirements of password\n       fill in (length - required) characters using whole list\n       splice in required characters at random locations\n"
+                },
+                {
+                    "date": 1637205858168,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -108,21 +108,17 @@\n       fill in (length - required) characters using whole list\n       splice in required characters at random locations\n presentPassword\n     */\n+   \n+   var generatePassword = function() {\n+     var generatedPassword = \"this is what we print\";\n+     return generatedPassword;\n+   }\n \n \n-\n // Assignment code here\n \n-//     get criteria\n-//     generate password\n-var generatePassword = function() {\n-  // fill in required characters first\n-  //   fill in remaining characters using whole list\n-  var generatedPassword = \"this is what we print\";\n-  return generatedPassword;\n-}\n   \n // Get references to the #generate element\n var generateBtn = document.querySelector(\"#generate\");\n \n"
+                },
+                {
+                    "date": 1637207222445,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -117,8 +117,12 @@\n \n \n // Assignment code here\n \n+// getPasswordLength;\n+// getTypesOfCharacters;\n+\n+\n   \n // Get references to the #generate element\n var generateBtn = document.querySelector(\"#generate\");\n \n"
+                },
+                {
+                    "date": 1637208331099,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,10 +12,10 @@\n \n var passwordLength = 8;\n \n var characterSet = [];\n-var passwordArray = [];\n-var passwordString = \"\";\n+var passwordArray = [\"t\", \"e\", \"s\", \"t\"]; // make empty later\n+var passwordString = \"\"; \n \n var resetVariables = function() {\n   characterSet = [];\n   passwordArray = [];\n@@ -109,20 +109,21 @@\n       splice in required characters at random locations\n presentPassword\n     */\n    \n-   var generatePassword = function() {\n-     var generatedPassword = \"this is what we print\";\n-     return generatedPassword;\n+  var generatePassword = function() {\n+//    fillPasswordArray();\n+    passwordString = passwordArray.join(\"\");\n+    return passwordString;\n    }\n \n \n // Assignment code here\n \n // getPasswordLength;\n // getTypesOfCharacters;\n+// generatePassword (needs to return the password)\n \n-\n   \n // Get references to the #generate element\n var generateBtn = document.querySelector(\"#generate\");\n \n"
+                },
+                {
+                    "date": 1637208691496,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,11 @@\n var characterSet = [];\n var passwordArray = [\"t\", \"e\", \"s\", \"t\"]; // make empty later\n var passwordString = \"\"; \n \n+// Get references to the #generate element\n+var generateBtn = document.querySelector(\"#generate\");\n+\n var resetVariables = function() {\n   characterSet = [];\n   passwordArray = [];\n   passwordString = \"\";\n@@ -109,24 +112,21 @@\n       splice in required characters at random locations\n presentPassword\n     */\n    \n-  var generatePassword = function() {\n-//    fillPasswordArray();\n-    passwordString = passwordArray.join(\"\");\n-    return passwordString;\n-   }\n-\n-\n-// Assignment code here\n-\n-// getPasswordLength;\n-// getTypesOfCharacters;\n-// generatePassword (needs to return the password)\n-\n+   \n+   \n+   // Assignment code here\n+   \n+   // getPasswordLength;\n+   // getTypesOfCharacters;\n+   \n+   var generatePassword = function() {\n+ //    fillPasswordArray();\n+     passwordString = passwordArray.join(\"\");\n+     return passwordString;\n+    }\n   \n-// Get references to the #generate element\n-var generateBtn = document.querySelector(\"#generate\");\n \n // Write password to the #password input\n function writePassword() {\n   var password = generatePassword();\n"
                 }
             ],
             "date": 1637038011201,

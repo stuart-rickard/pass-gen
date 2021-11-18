@@ -13,8 +13,11 @@ var typesOfCharactersToInclude = [false,false,false,false];
 var passwordLength = 8;
 
 var characterSet = [];
-var passwordArray = [];
-var passwordString = "";
+var passwordArray = ["t", "e", "s", "t"]; // make empty later
+var passwordString = ""; 
+
+// Get references to the #generate element
+var generateBtn = document.querySelector("#generate");
 
 var resetVariables = function() {
   characterSet = [];
@@ -109,22 +112,20 @@ generatePassword
       splice in required characters at random locations
 presentPassword
     */
-
-
-
-// Assignment code here
-
-//     get criteria
-//     generate password
-var generatePassword = function() {
-  // fill in required characters first
-  //   fill in remaining characters using whole list
-  var generatedPassword = "this is what we print";
-  return generatedPassword;
-}
+   
+   
+   
+   // Assignment code here
+   
+   // getPasswordLength;
+   // getTypesOfCharacters;
+   
+   var generatePassword = function() {
+ //    fillPasswordArray();
+     passwordString = passwordArray.join("");
+     return passwordString;
+    }
   
-// Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
