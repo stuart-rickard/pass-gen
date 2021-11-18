@@ -1,18 +1,37 @@
-const lowerCaseLetters = [ 'a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
+const minCharsInPassword = 8;
+const maxCharsInPassword = 128;
+
+const lowerCaseLetters = ['a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
 const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 const numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
 
-const minCharsInPassword = 8;
-const maxCharsInPassword = 128;
+var lowerCaseLettersObject = {
+  name: "lower case letter",
+  includeInPassword: false,
+  arrayOfCharacters: lowerCaseLetters
+}
+var upperCaseLettersObject = {
+  name: "upper case letter",
+  includeInPassword: false,
+  arrayOfCharacters: upperCaseLetters
+}
+var numbersZeroToNineObject = {
+  name: "number",
+  includeInPassword: false,
+  arrayOfCharacters: numbersZeroToNine
+}
+var upperCaseLettersObject = {
+  name: "special character",
+  includeInPassword: false,
+  arrayOfCharacters: specialCharacters
+}
 
+var passwordSource = [lowerCaseLettersObject, upperCaseLettersObject, numbersZeroToNineObject, upperCaseLettersObject];
 
-// This array tracks which types to include as follows: lower case, upper case, numbers, and specials
-var typesOfCharactersToInclude = [false,false,false,false];
+var passwordLength = 8; // 8 is a placeholder; this value will be set by user
 
-var passwordLength = 8;
-
-var characterSet = [];
+var characterSet = []; // working array to use as source for password characters
 var passwordArray = ["t", "e", "s", "t"]; // make empty later
 var passwordString = ""; 
 
@@ -87,6 +106,30 @@ var promptNumberOfCharacters = window.prompt('Please indicate the number of char
 validateEntryNumberWithMinMax(minCharsInPassword,maxCharsInPassword,promptNumberOfCharacters);
 
 
+// Assignment code here
+
+// getPasswordLength;
+// getTypesOfCharacters;
+   
+var generatePassword = function() {
+ //    fillPasswordArray();
+ passwordString = passwordArray.join("");
+ return passwordString;
+}
+
+
+// Write password to the #password input
+function writePassword() {
+  var password = generatePassword();
+  var passwordText = document.querySelector("#password");
+  
+  passwordText.value = password;
+  
+}
+
+// Add event listener to generate button
+generateBtn.addEventListener("click", writePassword);
+
 /*
                             var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
                 if (promptFight === 'skip' || promptFight === 'SKIP') {
@@ -115,26 +158,3 @@ presentPassword
    
    
    
-   // Assignment code here
-   
-   // getPasswordLength;
-   // getTypesOfCharacters;
-   
-   var generatePassword = function() {
- //    fillPasswordArray();
-     passwordString = passwordArray.join("");
-     return passwordString;
-    }
-  
-
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
-
-}
-
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
