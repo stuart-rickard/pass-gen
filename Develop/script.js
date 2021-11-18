@@ -1,12 +1,16 @@
-var anarray = ['a','b','c','d','e']
+const lowerCaseLetters = [ 'a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
+const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+const numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
 
-var lowerCaseLetters = [ 'a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
-var upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-var numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-var specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
+const minCharsInPassword = 8;
+const maxCharsInPassword = 128;
+
 
 // This array tracks which types to include as follows: lower case, upper case, numbers, and specials
 var typesOfCharactersToInclude = [false,false,false,false];
+
+var passwordLength = 8;
 
 var characterSet = [];
 var passwordArray = [];
@@ -16,6 +20,7 @@ var resetVariables = function() {
   characterSet = [];
   passwordArray = [];
   passwordString = "";
+  typesOfCharactersToInclude = [false,false,false,false];
 }
 
 // generates random number between two numbers, inclusive
@@ -30,6 +35,7 @@ var getRandomElementFromArray = function(array) {
   var randomIndex = getRandomNumberFromTo(0, lastElementIndex);
   return array[randomIndex];
 }
+
 // splice in random location
 var spliceValueAtRandomIndex = function(value, array) {
   var lastElementIndex = array.length - 1;
@@ -37,53 +43,71 @@ var spliceValueAtRandomIndex = function(value, array) {
   array = array.splice(randomIndex, 0, value);
 }
 
-// 
+// validates "y" or "n" entry, returns error message otherwise
+var validateEntryYorN = function(string) {
+  if (string.toLowerCase() == "y" || string.toLowerCase() == "yes") {
+    return "y";
+  }
+  else {
+    if (string.toLowerCase() == "n" || string.toLowerCase() == "no") {
+      return "n";
+    }
+    else {
+      return "Please enter either \"Y\" or \"N\"";
+    }
+  }
+};
 
-//obtainValidatedResponseOrQuit - uses allowable answers array to validate them
-//    try to do one function that can handle number range, yes/no, and selected at least one?
+// validates entry is an integer within a min/max range, returns error message otherwise
+var validateEntryNumberWithMinMax = function(string, min, max) {
+  var x = Number(string);
+  if ((x >= min && x <=max) && x == Math.round(x)) {
+    passwordLength = x;
+  }
+  else {
+      return "Please enter a whole number (integer) between " + min + " and " + max + ".";
+    }
+};
+
+// using the typesOfCharactersToInclude global variable arraty, validates at least one character type has been included for the password generator
+var atLeastOneCharacterTypeSelected = function() {
+  if (typesOfCharactersToInclude.includes(true)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+};
+
+var promptNumberOfCharacters = window.prompt('Please indicate the number of characters needed for the password (minimum of 8; maximum of 128)');
+
+validateEntryNumberWithMinMax(minCharsInPassword,maxCharsInPassword,promptNumberOfCharacters);
 
 
-            /*
-          
-            BASIC VAR: arrays of password characters
-              a-z ; A-Z ; 0-9 ; special characters list
-              allowable answers for questions [ , error message, allowable values]
-                number of characters 
-                yes or not
-                at least one of the types of characters
-        
-              
-
-
-how long a password - obtainAndValidate
-    validate or quit
-what are required characters
-    lowercase
-      validate or quit
-      uppercase
-      validate or quit
-      numbers?
-      validate or quit
-      special characters?
-      validate or quit
-      at least one selected
-       if not, go back to start or quit
-generate password
-    set up parameters
+/*
+                            var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+                if (promptFight === 'skip' || promptFight === 'SKIP') {
+                  
+                  var enemyNames = ['Roborto', 'Amy Android', 'Robo Trumble'];
+                  
+                  window.alert("This is an alert! JavaScript is running!");
+                  
+                  
+obtainValidPasswordLength
+  while password length is not OK
+    get password length
+obtainTypesOfChars
+  while typesofchars is not OK
+    get types of chars
+generatePassword
+    set up big array
+      fill it up except for any required
+    splice random the required ones
         length of password
         requirements of password
       fill in (length - required) characters using whole list
       splice in required characters at random locations
-present password
-    
-var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-    if (promptFight === 'skip' || promptFight === 'SKIP') {
-    
-var enemyNames = ['Roborto', 'Amy Android', 'Robo Trumble'];
-
-window.alert("This is an alert! JavaScript is running!");
-      
-
+presentPassword
     */
 
 
