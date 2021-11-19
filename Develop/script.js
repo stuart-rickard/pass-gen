@@ -1,11 +1,11 @@
 const minCharsInPassword = 8;
 const maxCharsInPassword = 128;
-
 const lowerCaseLetters = ['a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
 const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 const numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
 
+// objects and array of these objects to allow "for" loops to be used for creating the password
 var lowerCaseLettersObject = {
   name: "lower case letter",
   includeInPassword: false,
@@ -21,28 +21,30 @@ var numbersZeroToNineObject = {
   includeInPassword: false,
   arrayOfCharacters: numbersZeroToNine
 }
-var upperCaseLettersObject = {
+var specialCharactersObject = {
   name: "special character",
   includeInPassword: false,
   arrayOfCharacters: specialCharacters
 }
+var passwordSource = [lowerCaseLettersObject, upperCaseLettersObject, numbersZeroToNineObject, specialCharactersObject];
 
-var passwordSource = [lowerCaseLettersObject, upperCaseLettersObject, numbersZeroToNineObject, upperCaseLettersObject];
-
-var passwordLength = 8; // 8 is a placeholder; this value will be set by user
-
+var passwordLength = false; // false is a placeholder until user enters a valid password length; while it is false the user is prompted for a password length
+var numberOfTypesOfCharacters = 0; // used to confirm that user has selected at least one type of character and to reserve space for required characters
 var characterSet = []; // working array to use as source for password characters
-var passwordArray = ["t", "e", "s", "t"]; // make empty later
-var passwordString = ""; 
+var passwordArray = ["t", "e", "s", "t"]; // TODO make empty later // working array to hold randomly-selected password characters
+var passwordString = ""; // this is the string for the outputted password
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
 var resetVariables = function() {
+  passwordLength = 10;  //reset to false
   characterSet = [];
   passwordArray = [];
   passwordString = "";
-  typesOfCharactersToInclude = [false,false,false,false];
+  for (let i = 0; i < passwordSource.length; i++) {
+    passwordSource[i].includeInPassword = false;
+  }
 }
 
 // generates random number between two numbers, inclusive
@@ -75,7 +77,8 @@ var validateEntryYorN = function(string) {
       return "n";
     }
     else {
-      return "Please enter either \"Y\" or \"N\"";
+      window.alert("Your entry was not \"Y\" or \"N.\"  Please try again.");
+      return false;
     }
   }
 };
@@ -84,38 +87,100 @@ var validateEntryYorN = function(string) {
 var validateEntryNumberWithMinMax = function(string, min, max) {
   var x = Number(string);
   if ((x >= min && x <=max) && x == Math.round(x)) {
-    passwordLength = x;
+    return x;
   }
   else {
-      return "Please enter a whole number (integer) between " + min + " and " + max + ".";
-    }
-};
-
-// using the typesOfCharactersToInclude global variable arraty, validates at least one character type has been included for the password generator
-var atLeastOneCharacterTypeSelected = function() {
-  if (typesOfCharactersToInclude.includes(true)) {
-    return true;
-  }
-  else {
+    textForPromptNumberOfCharacters = "Your last entry for the number of characters in the password didn't work.  Please enter a whole number (integer) between " + min + " and " + max + ".";
     return false;
   }
 };
 
-var promptNumberOfCharacters = window.prompt('Please indicate the number of characters needed for the password (minimum of 8; maximum of 128)');
+// TODO add response to cancel choice
 
-validateEntryNumberWithMinMax(minCharsInPassword,maxCharsInPassword,promptNumberOfCharacters);
+                                  // using the typesOfCharactersToInclude global variable arraty, validates at least one character type has been included for the password generator
+                                  // var atLeastOneCharacterTypeSelected = function() {
+                                  //   if (typesOfCharactersToInclude.includes(true)) {
+                                  //     return true;
+                                  //   }
+                                  //   else {
+                                  //     return false;
+                                  //   }
+                                  // };
 
+
+var textForPromptNumberOfCharacters = "Please indicate the number of characters needed for the password (minimum of " + minCharsInPassword + "; maximum of " + maxCharsInPassword + ")";
+
+// var promptNumberOfCharacters = function() {
+//   window.prompt(textForPromptNumberOfCharacters);
+//};
 
 // Assignment code here
 
-// getPasswordLength;
-// getTypesOfCharacters;
-   
 var generatePassword = function() {
- //    fillPasswordArray();
+
+// intro statement to user;
+  // getPasswordLength;
+
+// XXXXXXXXXXXXXXXXXXXX reset passwordLength to false
+//   while (passwordLength == false) {
+//     passwordLength = window.prompt(textForPromptNumberOfCharacters);
+//     passwordLength = validateEntryNumberWithMinMax(passwordLength, minCharsInPassword, maxCharsInPassword);
+//   }  
+
+
+// getTypesOfCharacters; TODO: how many include in passwords do we have?
+var firstTime = true;
+while (numberOfTypesOfCharacters == 0) {
+  // message to user about what's coming up / error message if they've already tried before
+  if (firstTime) {
+    window.alert("Next you will choose types of characters to include in your password; you must include at least one type!");
+    firstTime = false;
+  } else {
+    window.alert("Please include at least one type of character in your password!");
+  };
+  
+  // for all types of chars
+  var textToPromptTypeOfCharacter = null;
+  for (i = 0; i < passwordSource.length; i++ ) {
+    textToPromptTypeOfCharacter = "Would you like to include " + passwordSource[i].name.toUpperCase() + "S in your password?  Please respond with \"Y\" or \"N.\""
+    var typeChoice = false; // this variable is used to repeat the prompt if an invalid entry is given, so it needs to be reset with each for loop
+    while (typeChoice == false) {
+      typeChoice = window.prompt(textToPromptTypeOfCharacter);
+      // get validated y or n
+      typeChoice = validateEntryYorN(typeChoice);
+      // if y, increment number of required chars and update include that type
+      if (typeChoice == "y") {
+        passwordSource[i].includeInPassword = true;
+        numberOfTypesOfCharacters++;
+      };
+    }
+  }
+  
+}
+//    fillPasswordArray();
+// for each type of char
+for (i = 0; i < passwordSource.length; i++ ) {
+  // if char is included
+  if (passwordSource[i].includeInPassword == true) {
+    // add that string to the pull-from string
+    characterSet = characterSet.concat(passwordSource[i].arrayOfCharacters);
+  }
+};
+
+debugger;
+  // for password length - number of required
+  for (i = 0; i < (passwordLength - numberOfTypesOfCharacters); i++ ) {
+
+    // pull values into the working string from the pull-from string
+    passwordArray.push(getRandomElementFromArray(characterSet));
+  };
+    // for each type of char
+    // if char is included 
+    // splice in required chars
+
  passwordString = passwordArray.join("");
  return passwordString;
-}
+};
 
 
 // Write password to the #password input
@@ -125,35 +190,17 @@ function writePassword() {
   
   passwordText.value = password;
   
+  //resetVariables(); // added to get ready for next password request and also so that the password is not sitting around in memory for hackers
 }
-
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
 /*
                             var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-                if (promptFight === 'skip' || promptFight === 'SKIP') {
-                  
-                  var enemyNames = ['Roborto', 'Amy Android', 'Robo Trumble'];
-                  
+                                  
                   window.alert("This is an alert! JavaScript is running!");
-                  
-                  
-obtainValidPasswordLength
-  while password length is not OK
-    get password length
-obtainTypesOfChars
-  while typesofchars is not OK
-    get types of chars
-generatePassword
-    set up big array
-      fill it up except for any required
-    splice random the required ones
-        length of password
-        requirements of password
-      fill in (length - required) characters using whole list
-      splice in required characters at random locations
-presentPassword
+                             
+
     */
    
    
