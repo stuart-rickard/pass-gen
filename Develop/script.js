@@ -86,7 +86,6 @@ var validateEntryYorN = function(string) {
   }
 };
 
-
 // provides instructions to user if cancel button is clicked in response to a window.prompt
 var userClickedCancel = function() {
   window.alert("You clicked \"Cancel\"; if you wish to restart, please refresh this page; if you wish to exit altogether, please close this browser window.  If you click \"OK,\" we'll continue from where we were.");
@@ -119,8 +118,10 @@ var getPasswordLength = function() {
 };
 
 var getTypesOfCharacters = function() {
+  
   var firstTime = true;
   while (numberOfTypesOfCharacters == 0) {
+    
     // message to user about what's coming up / error message if they've already tried before
     if (firstTime) {
       window.alert("Next, please choose types of characters to include in your password.  There are " + passwordSource.length + " types.  You must include at least one type!");
@@ -129,8 +130,7 @@ var getTypesOfCharacters = function() {
       window.alert("Please include at least one type of character in your password!");
     };
     
-    // for all types of chars
-    
+    // for loop to update each character-type object whether its character-type is included or not
     for (i = 0; i < passwordSource.length; i++ ) {
       var textToPromptTypeOfCharacter = "Would you like to include " + passwordSource[i].name.toUpperCase() + "S in your password?  Please respond with \"Y\" or \"N.\""
       var typeChoice = false; // this variable is used to repeat the prompt if an invalid entry is given, so it needs to be reset with each for loop
@@ -142,7 +142,7 @@ var getTypesOfCharacters = function() {
           typeChoice = false;
           userClickedCancel();
         } else {
-          // get validated y or n
+          // validate the response as either y or n
           typeChoice = validateEntryYorN(typeChoice);
           
           // if y, increment number of required chars and update include that type
@@ -158,58 +158,43 @@ var getTypesOfCharacters = function() {
   
 var fillPasswordArray = function() {
 
-  // for each type of char
+  // for each type of character
   for (i = 0; i < passwordSource.length; i++ ) {
-    // if char is included
+    // if that character-type is included
     if (passwordSource[i].includeInPassword == true) {
-      // add that string to the pull-from string
+      // add that set of characters to the set of characters we are drawing from randomly
       characterSet = characterSet.concat(passwordSource[i].arrayOfCharacters);
     }
   };
   
-  // for password length - number of required
+  // fill in the passWord array with characters (leaving room for the required characters in case a required character isn't drawn)
   for (i = 0; i < (passwordLength - numberOfTypesOfCharacters); i++ ) {
-    // pull values into the working string from the pull-from string
     passwordArray.push(getRandomElementFromArray(characterSet));
   };
   
-  // for each type of char
+  // splice in one of each required character at a randome position in passwordArray
   for (i=0; i < passwordSource.length; i++) {
-    // if char is included 
     if (passwordSource[i].includeInPassword == true) {
-      // splice in required chars
       spliceValueAtRandomIndex(getRandomElementFromArray(passwordSource[i].arrayOfCharacters), passwordArray);
-      
     };
   }
 };
   
-
-
-
-
 // main function for generating password; password is returned as a string
-var generatePassword = function() {
-  
+var generatePassword = function() {  
   getPasswordLength();
-
   getTypesOfCharacters();
-
   fillPasswordArray();
-
-
-passwordString = passwordArray.join("");
-return passwordString;
+  passwordString = passwordArray.join("");
+  return passwordString;
 };
-
 
 // Write password to the #password input
 function writePassword() {
-  var password = generatePassword();
-  
-  passwordText.value = password;
-  
+  var password = generatePassword();  
+  passwordText.value = password;  
   resetVariables(); // clear password traces from memory and get ready for next password request
 }
+
 // event listener for generate button
 generateBtn.addEventListener("click", writePassword);
