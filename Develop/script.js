@@ -5,7 +5,7 @@ const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 const numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_', '/', ':', ';', '?', '[', ']', '{', '}', '~'];
 
-// character type objects
+// character-type objects
 var lowerCaseLettersObject = {
   name: "lower case letter",
   includeInPassword: false,
@@ -56,7 +56,7 @@ var getRandomNumberFromTo = function(min, max) {
   return x;
 }            
 
-// pulls an element at random from an array
+// returns a random element from an array
 var getRandomElementFromArray = function(array) {
   var lastElementIndex = array.length - 1;
   var randomIndex = getRandomNumberFromTo(0, lastElementIndex);
@@ -70,7 +70,7 @@ var spliceValueAtRandomIndex = function(value, array) {
   array = array.splice(randomIndex, 0, value);
 }
 
-// validates "y" or "n" entry, returns error message otherwise
+// validates "y" or "n" entry, alerts user with an error message otherwise
 var validateEntryYorN = function(string) {
   if (string.toLowerCase() == "y" || string.toLowerCase() == "yes") {
     return "y";
@@ -86,31 +86,28 @@ var validateEntryYorN = function(string) {
   }
 };
 
-// validates entry is an integer within a min/max range, returns error message otherwise
-var validateEntryNumberWithMinMax = function(string, min, max) {
-  var x = Number(string);
-  if ((x >= min && x <=max) && x == Math.round(x)) {
-    return x;
-  }
-  else {
-    textForPromptNumberOfCharacters = "Your last entry for the number of characters in the password didn't work.  Please enter a whole number (integer) between " + min + " and " + max + ".";
-    return false;
-  }
-};
 
-// TODO add response to cancel choice
+// provides instructions to user if cancel button is clicked in response to a window.prompt
 var userClickedCancel = function() {
   window.alert("You clicked \"Cancel\"; if you wish to restart, please refresh this page; if you wish to exit altogether, please close this browser window.  If you click \"OK,\" we'll continue from where we were.");
 }
 
-// Assignment code here
-
-var generatePassword = function() {
+// updates passwordLength global variable with a validated number
+var getPasswordLength = function() {
   
-  // intro statement to user;
-  var textForPromptNumberOfCharacters = "Please indicate the number of characters needed for the password (minimum of " + minCharsInPassword + "; maximum of " + maxCharsInPassword + ")";
-  // getPasswordLength;
+  // this subfunction validates entry is an integer within a min/max range, alerts user with an error message otherwise
+  var validateEntryNumberWithMinMax = function(string, min, max) {
+    var x = Number(string);
+    if ((x >= min && x <=max) && x == Math.round(x)) {
+      return x;
+    }
+    else {
+      textForPromptNumberOfCharacters = "Your last entry for the number of characters in the password didn't work.  Please enter a whole number (integer) between " + min + " and " + max + ".";
+      return false;
+    }
+  };
 
+  var textForPromptNumberOfCharacters = "Please indicate the number of characters needed for the password (minimum of " + minCharsInPassword + "; maximum of " + maxCharsInPassword + ")";
   while (passwordLength == false) {
     passwordLength = window.prompt(textForPromptNumberOfCharacters);
     if (passwordLength == null) {
@@ -118,73 +115,88 @@ var generatePassword = function() {
       userClickedCancel();
     };
     passwordLength = validateEntryNumberWithMinMax(passwordLength, minCharsInPassword, maxCharsInPassword);
-  }  
+  };  
+};
 
-
-// getTypesOfCharacters; 
-var firstTime = true;
-while (numberOfTypesOfCharacters == 0) {
-  // message to user about what's coming up / error message if they've already tried before
-  if (firstTime) {
-    window.alert("Next, please choose types of characters to include in your password.  There are " + passwordSource.length + " types.  You must include at least one type!");
-    firstTime = false;
-  } else {
-    window.alert("Please include at least one type of character in your password!");
-  };
-  
-  // for all types of chars
-  var textToPromptTypeOfCharacter = null;  // TODO: why is this needed? It is because we want to set up a variable.  But do we need to do this?
-
-  for (i = 0; i < passwordSource.length; i++ ) {
-    textToPromptTypeOfCharacter = "Would you like to include " + passwordSource[i].name.toUpperCase() + "S in your password?  Please respond with \"Y\" or \"N.\""
-    var typeChoice = false; // this variable is used to repeat the prompt if an invalid entry is given, so it needs to be reset with each for loop
-
-    while (typeChoice == false) {
-      typeChoice = window.prompt(textToPromptTypeOfCharacter);
-
-      if (typeChoice == null) {
-        typeChoice = false;
-        userClickedCancel();
-      } else {
-        // get validated y or n
-        typeChoice = validateEntryYorN(typeChoice);
-
-        // if y, increment number of required chars and update include that type
-        if (typeChoice == "y") {
-          passwordSource[i].includeInPassword = true;
-          numberOfTypesOfCharacters++;
-        };
-      } 
+var getTypesOfCharacters = function() {
+  var firstTime = true;
+  while (numberOfTypesOfCharacters == 0) {
+    // message to user about what's coming up / error message if they've already tried before
+    if (firstTime) {
+      window.alert("Next, please choose types of characters to include in your password.  There are " + passwordSource.length + " types.  You must include at least one type!");
+      firstTime = false;
+    } else {
+      window.alert("Please include at least one type of character in your password!");
+    };
+    
+    // for all types of chars
+    
+    for (i = 0; i < passwordSource.length; i++ ) {
+      var textToPromptTypeOfCharacter = "Would you like to include " + passwordSource[i].name.toUpperCase() + "S in your password?  Please respond with \"Y\" or \"N.\""
+      var typeChoice = false; // this variable is used to repeat the prompt if an invalid entry is given, so it needs to be reset with each for loop
+      
+      while (typeChoice == false) {
+        typeChoice = window.prompt(textToPromptTypeOfCharacter);
+        
+        if (typeChoice == null) {
+          typeChoice = false;
+          userClickedCancel();
+        } else {
+          // get validated y or n
+          typeChoice = validateEntryYorN(typeChoice);
+          
+          // if y, increment number of required chars and update include that type
+          if (typeChoice == "y") {
+            passwordSource[i].includeInPassword = true;
+            numberOfTypesOfCharacters++;
+          };
+        } 
+      }
     }
   }
-}
+}; 
+  
+var fillPasswordArray = function() {
 
-
-//    fillPasswordArray();
-// for each type of char
-for (i = 0; i < passwordSource.length; i++ ) {
-  // if char is included
-  if (passwordSource[i].includeInPassword == true) {
-    // add that string to the pull-from string
-    characterSet = characterSet.concat(passwordSource[i].arrayOfCharacters);
+  // for each type of char
+  for (i = 0; i < passwordSource.length; i++ ) {
+    // if char is included
+    if (passwordSource[i].includeInPassword == true) {
+      // add that string to the pull-from string
+      characterSet = characterSet.concat(passwordSource[i].arrayOfCharacters);
+    }
+  };
+  
+  // for password length - number of required
+  for (i = 0; i < (passwordLength - numberOfTypesOfCharacters); i++ ) {
+    // pull values into the working string from the pull-from string
+    passwordArray.push(getRandomElementFromArray(characterSet));
+  };
+  
+  // for each type of char
+  for (i=0; i < passwordSource.length; i++) {
+    // if char is included 
+    if (passwordSource[i].includeInPassword == true) {
+      // splice in required chars
+      spliceValueAtRandomIndex(getRandomElementFromArray(passwordSource[i].arrayOfCharacters), passwordArray);
+      
+    };
   }
 };
+  
 
-// for password length - number of required
-for (i = 0; i < (passwordLength - numberOfTypesOfCharacters); i++ ) {
-  // pull values into the working string from the pull-from string
-  passwordArray.push(getRandomElementFromArray(characterSet));
-};
 
-// for each type of char
-for (i=0; i < passwordSource.length; i++) {
-  // if char is included 
-  if (passwordSource[i].includeInPassword == true) {
-    // splice in required chars
-    spliceValueAtRandomIndex(getRandomElementFromArray(passwordSource[i].arrayOfCharacters), passwordArray);
-    
-  };
-}
+
+
+// main function for generating password; password is returned as a string
+var generatePassword = function() {
+  
+  getPasswordLength();
+
+  getTypesOfCharacters();
+
+  fillPasswordArray();
+
 
 passwordString = passwordArray.join("");
 return passwordString;
