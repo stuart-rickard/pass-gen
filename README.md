@@ -17,9 +17,9 @@ This website is the completed code for the third "challenge" of the course, to c
 4. Developed messages and prompts to the user and error-check functions to deal with responses.
 5. Refactored the code to hopefully make it easier to understand.
 
-I believe the completed code meets the challenge criteria, however there are a couple of items that I did not have time to do, but would be desirable.  I would have liked to set up a form interface as an alternative for users -- the page would be much more usable this way -- but this was not a priority as it seems a big part of the challenge is to write the error-checking.  Also, it would be good to have a choice to generate another password using the same criteria that were just entered.  I have made both of these issues on GitHub.
+I believe the completed code meets the challenge criteria, however there are a couple of items that I did not have time to do, but would be desirable.  I would have liked to set up a form interface as an alternative for users--the page would be much more usable this way--but this was not a priority as it seems a big part of the challenge is to write the error-checking.  Also, it would be good to have a choice to generate another password using the same criteria that were just entered.  I have made both of these issues on GitHub.
   
 ## Link to Live Password Generator
   
 The live password generator webpage can be found at this link: 
-https://stuart-rickard.github.io/srport/
+https://stuart-rickard.github.io/pass-gen/Develop/index.html
