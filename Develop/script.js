@@ -3,7 +3,7 @@ const maxCharsInPassword = 128;
 const lowerCaseLetters = ['a', 'b','c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
 const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 const numbersZeroToNine = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_'];
+const specialCharacters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '.', '~', '|', '<', '>', '=', '-', '_', '/', ':', ';', '?', '[', ']', '{', '}', '~'];
 
 // character type objects
 var lowerCaseLettersObject = {
@@ -46,8 +46,9 @@ var resetVariables = function() {
   }
 }
 
-// Get references to the #generate element
+// Get references to the #generate button and #password textarea
 var generateBtn = document.querySelector("#generate");
+var passwordText = document.querySelector("#password");
 
 // generates random number between two numbers, inclusive
 var getRandomNumberFromTo = function(min, max) {
@@ -62,7 +63,7 @@ var getRandomElementFromArray = function(array) {
   return array[randomIndex];
 }
 
-// splices a given value in a random location in an array; this is used to make sure that required characters are always included in the output
+// splices a given value into a random location in a given array; this is used to ensure that required characters are always included in the output
 var spliceValueAtRandomIndex = function(value, array) {
   var lastElementIndex = array.length - 1;
   var randomIndex = getRandomNumberFromTo(0, lastElementIndex);
@@ -98,53 +99,67 @@ var validateEntryNumberWithMinMax = function(string, min, max) {
 };
 
 // TODO add response to cancel choice
-
-var textForPromptNumberOfCharacters = "Please indicate the number of characters needed for the password (minimum of " + minCharsInPassword + "; maximum of " + maxCharsInPassword + ")";
+var userClickedCancel = function() {
+  window.alert("You clicked \"Cancel\"; if you wish to restart, please refresh this page; if you wish to exit altogether, please close this browser window.  If you click \"OK,\" we'll continue from where we were.");
+}
 
 // Assignment code here
 
 var generatePassword = function() {
-
-// intro statement to user;
+  
+  // intro statement to user;
+  var textForPromptNumberOfCharacters = "Please indicate the number of characters needed for the password (minimum of " + minCharsInPassword + "; maximum of " + maxCharsInPassword + ")";
   // getPasswordLength;
 
   while (passwordLength == false) {
     passwordLength = window.prompt(textForPromptNumberOfCharacters);
-    // if return null - cancel
+    if (passwordLength == null) {
+      passwordLength = "will not be validated";
+      userClickedCancel();
+    };
     passwordLength = validateEntryNumberWithMinMax(passwordLength, minCharsInPassword, maxCharsInPassword);
   }  
 
 
-// getTypesOfCharacters; TODO: how many include in passwords do we have?
+// getTypesOfCharacters; 
 var firstTime = true;
 while (numberOfTypesOfCharacters == 0) {
   // message to user about what's coming up / error message if they've already tried before
   if (firstTime) {
-    window.alert("Next please choose types of characters to include in your password; you must include at least one type!");
+    window.alert("Next, please choose types of characters to include in your password.  There are " + passwordSource.length + " types.  You must include at least one type!");
     firstTime = false;
   } else {
     window.alert("Please include at least one type of character in your password!");
   };
   
   // for all types of chars
-  var textToPromptTypeOfCharacter = null;
+  var textToPromptTypeOfCharacter = null;  // TODO: why is this needed? It is because we want to set up a variable.  But do we need to do this?
+
   for (i = 0; i < passwordSource.length; i++ ) {
     textToPromptTypeOfCharacter = "Would you like to include " + passwordSource[i].name.toUpperCase() + "S in your password?  Please respond with \"Y\" or \"N.\""
     var typeChoice = false; // this variable is used to repeat the prompt if an invalid entry is given, so it needs to be reset with each for loop
+
     while (typeChoice == false) {
       typeChoice = window.prompt(textToPromptTypeOfCharacter);
-      // if return null - cancel
-      // get validated y or n
-      typeChoice = validateEntryYorN(typeChoice);
-      // if y, increment number of required chars and update include that type
-      if (typeChoice == "y") {
-        passwordSource[i].includeInPassword = true;
-        numberOfTypesOfCharacters++;
-      };
+
+      if (typeChoice == null) {
+        typeChoice = false;
+        userClickedCancel();
+      } else {
+        // get validated y or n
+        typeChoice = validateEntryYorN(typeChoice);
+
+        // if y, increment number of required chars and update include that type
+        if (typeChoice == "y") {
+          passwordSource[i].includeInPassword = true;
+          numberOfTypesOfCharacters++;
+        };
+      } 
     }
   }
-  
 }
+
+
 //    fillPasswordArray();
 // for each type of char
 for (i = 0; i < passwordSource.length; i++ ) {
@@ -160,7 +175,6 @@ for (i = 0; i < (passwordLength - numberOfTypesOfCharacters); i++ ) {
   // pull values into the working string from the pull-from string
   passwordArray.push(getRandomElementFromArray(characterSet));
 };
-debugger;
 
 // for each type of char
 for (i=0; i < passwordSource.length; i++) {
@@ -172,23 +186,18 @@ for (i=0; i < passwordSource.length; i++) {
   };
 }
 
- passwordString = passwordArray.join("");
- return passwordString;
+passwordString = passwordArray.join("");
+return passwordString;
 };
 
 
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
-  var passwordText = document.querySelector("#password");
   
   passwordText.value = password;
   
-  resetVariables(); // added to get ready for next password request and also so that the password is not sitting around in memory for hackers
+  resetVariables(); // clear password traces from memory and get ready for next password request
 }
-// Add event listener to generate button
+// event listener for generate button
 generateBtn.addEventListener("click", writePassword);
-
-   
-   // do you want the same settings as last time?
-   
